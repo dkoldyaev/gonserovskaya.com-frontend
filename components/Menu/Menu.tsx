@@ -23,12 +23,15 @@ export async function MenuItem({ text, target, page, isCurrent }: TMenuItem & { 
     styles.menuLink,
     { [styles['menuLink-active']]: isCurrent }
   );
-  const currentLocale = await getCurrentLocale()
+  const currentLocale = await getCurrentLocale();
+  const localizedUrl = page.url.startsWith('/')
+    ? `/${currentLocale}${page.url}`      // /about → /en/about
+    : `/${currentLocale}/${page.url}`;
 
   return (
     <li>
-      <Link href={`${currentLocale}${page.url}`} className={className} target={target}>
-        {text}
+      <Link href={localizedUrl} locale={currentLocale} className={className} target={target}>
+        {text} ({currentLocale})
       </Link>
     </li>
   );

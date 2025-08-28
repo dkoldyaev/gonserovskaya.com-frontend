@@ -14,7 +14,7 @@ export async function LangSwitcherItem({ lang, isCurrent }: { lang: Locale; isCu
     <li className={className}>
       <Link
         className={styles['lang-link']}
-        lang={lang.code}
+        locale={lang.code}
         href={currentPath.replace(`/${currentLocale}`, `/${lang.code}`)}
       >
         {lang.name}
