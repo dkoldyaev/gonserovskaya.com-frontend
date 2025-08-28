@@ -1,0 +1,4 @@
+{
+  "title": "Hola desde Next.js (Componentes de Servidor)",
+  "description": "Esta página se renderiza completamente en el servidor y usa solo componentes de servidor."
+}

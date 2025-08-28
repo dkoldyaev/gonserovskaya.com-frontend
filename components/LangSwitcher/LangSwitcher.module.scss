@@ -1,0 +1,40 @@
+.langSwitcher {
+  display: block;
+  text-transform: uppercase;
+  position: absolute;
+  left: 60px;
+  top: 0;
+  z-index: 1;
+  font-size: 24px;
+
+  @media all and (max-width: 1300px) {
+    left: 12px;
+  }
+
+  @media all and (max-width: 767px) {
+    font-size: 14px;
+    top: 1px;
+  }
+
+  .lang-item {
+    display: none;
+    cursor: pointer;
+    padding-bottom: 15px;
+  }
+
+  .lang-item--active {
+    display: block;
+    color: #fff;
+  }
+
+  &--opened {
+    .lang-item {
+      display: block;
+    }
+  }
+}
+
+.lang-link {
+  color: #000;
+  text-decoration: none;
+}

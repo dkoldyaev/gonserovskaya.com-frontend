@@ -1,0 +1,24 @@
+.layout {
+  display: flex;
+  width: 100%;
+  max-width: 1044px;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.layoutWrapper {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  padding: 0 130px;
+
+  @media all and (max-width: 1300px) {
+    padding: 0 80px;
+  }
+
+  @media all and (max-width: 767px) {
+    padding: 0 40px;
+  }
+}

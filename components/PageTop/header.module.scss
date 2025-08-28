@@ -1,0 +1,16 @@
+.header {
+  display: flex;
+  background: rgba(0, 0, 0, .7);
+  align-items: flex-end;
+  height: 65px;
+  overflow: visible;
+  line-height: 20px;
+}
+
+.headerInner {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: flex-end;
+  margin-bottom: -3px;
+}
