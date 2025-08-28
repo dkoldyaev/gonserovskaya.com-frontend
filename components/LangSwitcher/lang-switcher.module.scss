@@ -1,0 +1,49 @@
+.langSwitcher {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.currentLang {
+  font-weight: 600;
+  color: #007bff;
+  padding: 8px 16px;
+  background: #e3f2fd;
+  border-radius: 4px;
+}
+
+.languagesList {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 8px;
+}
+
+.lang-item {
+  margin: 0;
+  padding: 0;
+}
+
+.lang-link {
+  display: block;
+  padding: 8px 16px;
+  color: #333;
+  text-decoration: none;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+
+  &:hover {
+    background: #f5f5f5;
+    border-color: #007bff;
+  }
+}
+
+.lang-item--active .lang-link {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+  font-weight: 500;
+}

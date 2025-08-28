@@ -10,9 +10,6 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
     <main>
       <h1>{dict.title}</h1>
       <p>{dict.description}</p>
-      <nav>
-        <a href="/en">English</a> | <a href="/es">Español</a> | <a href="/ru">Русский</a>
-      </nav>
     </main>
   );
 }

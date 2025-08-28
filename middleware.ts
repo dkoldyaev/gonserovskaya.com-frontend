@@ -26,20 +26,44 @@ const resolvePreferredLocale = (req: NextRequest, locales: readonly string[], de
 export async function middleware(req: NextRequest) {
   const { locales, defaultLocale } = await getI18n();
   const { pathname } = req.nextUrl;
+
+  // Check if pathname already has a locale prefix
   const hasLocalePrefix = locales.some((l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`));
+
   if (hasLocalePrefix) {
     const locale = pathname.split('/')[1] || defaultLocale;
     const res = NextResponse.next();
     res.cookies.set(LOCALE_COOKIE, locale, { path: '/', maxAge: 60 * 60 * 24 * 365 });
+
+    // Add headers for server components
+    res.headers.set('x-current-locale', locale);
+    res.headers.set('x-current-url', pathname);
+
     return res;
   }
 
-  // Redirect to default locale provided by API, regardless of Accept-Language
-  const locale = defaultLocale;
-  const url = req.nextUrl.clone();
-  url.pathname = `/${locale}${pathname}`;
-  const res = NextResponse.redirect(url);
-  res.cookies.set(LOCALE_COOKIE, locale, { path: '/', maxAge: 60 * 60 * 24 * 365 });
+  // Only redirect if we're at the root path, not if we're already in a locale path
+  if (pathname === '/') {
+    const locale = defaultLocale;
+    const url = req.nextUrl.clone();
+    url.pathname = `/${locale}`;
+    const res = NextResponse.redirect(url);
+    res.cookies.set(LOCALE_COOKIE, locale, { path: '/', maxAge: 60 * 60 * 24 * 365 });
+
+    // Add headers for server components
+    res.headers.set('x-current-locale', locale);
+    res.headers.set('x-current-url', `/${locale}`);
+
+    return res;
+  }
+
+  // For any other path without locale, let it pass through
+  const res = NextResponse.next();
+
+  // Add headers for server components
+  res.headers.set('x-current-locale', defaultLocale);
+  res.headers.set('x-current-url', pathname);
+
   return res;
 }
 

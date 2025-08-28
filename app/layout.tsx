@@ -1,24 +1,22 @@
 import 'server-only';
-import type { ReactNode } from 'react';
+import type { PropsWithChildren, ReactNode } from 'react';
 import { cookies } from 'next/headers';
-import { i18n } from '@/i18n/config';
 import { getI18n } from '@/i18n/remote';
+import { PageMarkup } from '@/components/PageMarkup';
+import { PageTop } from '@/components/PageTop';
+import styles from './layout.module.scss';
+import classNames from 'classnames';
 
-const LOCALE_COOKIE = 'NEXT_LOCALE';
-
-export default async function RootLayout({ children }: { children: ReactNode }) {
-  const cookieStore = await cookies();
-  const cookieLocale = cookieStore.get(LOCALE_COOKIE)?.value;
-  const { locales, defaultLocale } = await getI18n();
-  const isSupported = locales.includes(cookieLocale ?? '');
-  const locale = isSupported ? (cookieLocale as string) : defaultLocale;
-  return (
-    <html lang={locale}>
-      <body>
-        {children}
-      </body>
-    </html>
-  );
+export default async function RootLayout({ children }: PropsWithChildren) {
+  const appClassName = classNames(styles.App);
+  return <html><body>
+    <div className={appClassName}>
+      <PageTop />
+      <div className={styles.mainSection}>
+        <PageMarkup>{children}</PageMarkup>
+      </div>
+    </div>
+  </body></html>;
 }
 
 
