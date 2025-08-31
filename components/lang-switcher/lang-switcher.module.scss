@@ -38,3 +38,19 @@
   color: #000;
   text-decoration: none;
 }
+
+.languagesList {
+  display: none;
+}
+
+.checkboxHandler {
+  display: none;
+
+  &:checked+.languagesList {
+    display: block;
+
+    .lang-item {
+      display: block;
+    }
+  }
+}

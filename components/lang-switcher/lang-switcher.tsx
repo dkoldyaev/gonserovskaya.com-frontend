@@ -30,7 +30,8 @@ export async function LangSwitcher() {
 
   return (
     <div className={styles.langSwitcher}>
-      <span className={styles.currentLang}>{(currentLang || locales[0])?.name}</span>
+      <label htmlFor="lang-switcher" className={styles.currentLang}>{(currentLang || locales[0])?.name}</label>
+      <input type="checkbox" id="lang-switcher" className={styles.checkboxHandler} />
       <ul className={styles.languagesList}>
         {locales.map(locale => (
           <LangSwitcherItem

@@ -1,8 +1,7 @@
-import { LangSwitcher } from '../LangSwitcher/LangSwitcher';
+import { LangSwitcher } from '../lang-switcher/lang-switcher';
 import { PageMarkup } from '../PageMarkup';
-import { Menu } from '../Menu/Menu';
-import { getCurrentLocale } from '@/lib/headers';
-import styles from './header.module.scss';
+import styles from './page-top.module.scss';
+import { Menu } from '../menu/menu';
 
 export async function PageTop() {
   return (

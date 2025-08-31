@@ -28,7 +28,9 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Check if pathname already has a locale prefix
-  const hasLocalePrefix = locales.some((l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`));
+  const hasLocalePrefix = locales.some((l) => pathname === `/${l.code}` || pathname.startsWith(`/${l.code}/`));
+
+  console.log({ locales, defaultLocale, pathname, hasLocalePrefix });
 
   if (hasLocalePrefix) {
     const locale = pathname.split('/')[1] || defaultLocale;
