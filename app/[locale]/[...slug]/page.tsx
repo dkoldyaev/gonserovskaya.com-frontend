@@ -4,12 +4,13 @@ import { LangSwitcher } from '@/components/lang-switcher/lang-switcher';
 import { getCurrentLocale, getCurrentUrl } from '@/lib/headers';
 import { PageMarkup } from '@/components/PageMarkup';
 import { PageTop } from '@/components/page-top';
+import { TPageApiResponse, TPageData } from '@/types/api-response';
 import styles from './page.module.scss';
 import qs from 'qs';
 
 const host = process.env.API_ENDPOINT;
 
-async function getAllPages() {
+async function getAllPages(): Promise<TPageApiResponse> {
   const locale = await getCurrentLocale();
   const query = qs.stringify({
     pagination: {
@@ -17,14 +18,14 @@ async function getAllPages() {
       pageSize: 1000,
     },
   }, {
-    encodeValuesOnly: true, // prettify URL
+    encodeValuesOnly: true,
   });
   const url = `${host}/api/pages/?${query}`;
   console.log('getAllPages', { url });
   return await (await fetch(url)).json();
 }
 
-async function getPage(slug: string[]) {
+async function getPage(slug: string[]): Promise<TPageData | undefined> {
   const locale = await getCurrentLocale();
   const query = qs.stringify({
     locale,
@@ -52,7 +53,8 @@ async function getPage(slug: string[]) {
   const url = `${host}/api/pages?${query}`;
   console.log({ url });
 
-  return (await (await fetch(url)).json()).data[0];
+  const response: TPageApiResponse = await (await fetch(url)).json();
+  return response.data[0];
 }
 
 export default async function Page({ params }: { params: { slug: string[]; locale: string } }) {
@@ -66,13 +68,7 @@ export default async function Page({ params }: { params: { slug: string[]; local
       <PageTop />
       <div className={styles.mainSection}>
         <PageMarkup>
-
           <main>
-            <h1>{dict.title}</h1>
-            <p>{dict.description}</p>
-            <p>Current URL: {currentUrl}</p>
-            <p>Locale: {locale}</p>
-            <pre>{JSON.stringify(slug, null, 2)}</pre>
             <pre>{JSON.stringify(page, null, 2)}</pre>
           </main>
         </PageMarkup>

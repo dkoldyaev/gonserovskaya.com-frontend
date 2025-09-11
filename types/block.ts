@@ -1,4 +1,18 @@
-import { TGalleryBlock } from "./galery.block";
-import { TPagesListBlock } from "./pages-list.block";
+import {
+  TImageBlock,
+  TFileBlock,
+  TEmbeddedBlock,
+  TSingleImageBlock,
+  TGalleryBlock,
+  TPagesListBlock,
+  TTextBlock,
+} from "./blocks";
 
-export type TBlock = TPagesListBlock | TGalleryBlock;
+export type TBlock =
+  | TImageBlock
+  | TFileBlock
+  | TEmbeddedBlock
+  | TSingleImageBlock
+  | TGalleryBlock
+  | TPagesListBlock
+  | TTextBlock;
