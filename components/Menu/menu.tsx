@@ -31,7 +31,7 @@ export async function MenuItem({ text, target, page, isCurrent }: TMenuItem & { 
   return (
     <li>
       <Link href={localizedUrl} locale={currentLocale} className={className} target={target}>
-        {text} ({currentLocale})
+        {text}
       </Link>
     </li>
   );

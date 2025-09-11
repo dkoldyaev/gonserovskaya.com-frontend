@@ -5,13 +5,61 @@ import { getCurrentLocale, getCurrentUrl } from '@/lib/headers';
 import { PageMarkup } from '@/components/PageMarkup';
 import { PageTop } from '@/components/page-top';
 import styles from './page.module.scss';
+import qs from 'qs';
 
-export const dynamic = 'force-dynamic';
+const host = process.env.API_ENDPOINT;
 
-export default async function Page({ params: { slug } }: { params: { slug: string, locale: string } }) {
+async function getAllPages() {
   const locale = await getCurrentLocale();
+  const query = qs.stringify({
+    pagination: {
+      page: 1,
+      pageSize: 1000,
+    },
+  }, {
+    encodeValuesOnly: true, // prettify URL
+  });
+  const url = `${host}/api/pages/?${query}`;
+  console.log('getAllPages', { url });
+  return await (await fetch(url)).json();
+}
+
+async function getPage(slug: string[]) {
+  const locale = await getCurrentLocale();
+  const query = qs.stringify({
+    locale,
+    filters: {
+      url: {
+        "$eq": `/${(slug || ['projects']).join('/')}`
+      }
+    },
+    populate: [
+      'cover',
+      'seo.og_image',
+      'seo.twitter_card',
+      'seo.twitter_image',
+      'content',
+      'content.image',
+      'content.file',
+      'content.file.file',
+      'content.images',
+      'content.images.image',
+      'content.pages',
+      'content.pages.cover'
+    ]
+  }, { encodeValuesOnly: false });
+
+  const url = `${host}/api/pages?${query}`;
+  console.log({ url });
+
+  return (await (await fetch(url)).json()).data[0];
+}
+
+export default async function Page({ params }: { params: { slug: string[]; locale: string } }) {
+  const { slug, locale } = params;
   const dict = await getDictionary(locale);
   const currentUrl = await getCurrentUrl();
+  const page = await getPage(slug);
 
   return (
     <>
@@ -24,7 +72,8 @@ export default async function Page({ params: { slug } }: { params: { slug: strin
             <p>{dict.description}</p>
             <p>Current URL: {currentUrl}</p>
             <p>Locale: {locale}</p>
-            <pre>{JSON.stringify(slug)}</pre>
+            <pre>{JSON.stringify(slug, null, 2)}</pre>
+            <pre>{JSON.stringify(page, null, 2)}</pre>
           </main>
         </PageMarkup>
       </div>
