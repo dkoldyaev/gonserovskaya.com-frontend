@@ -1,16 +1,16 @@
 import 'server-only';
 import { Metadata } from 'next';
 import { getDictionary } from '@/i18n/get-dictionary';
-import { LangSwitcher } from '@/components/lang-switcher/lang-switcher';
-import { getCurrentLocale, getCurrentUrl } from '@/lib/headers';
+import { getCurrentUrl } from '@/lib/headers';
 import { PageMarkup } from '@/components/page-markup';
 import { PageTop } from '@/components/page-top';
 import { pageService } from '@/services';
 import { metadataGenerator } from '@/modules/seo';
 import styles from './page.module.scss';
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string[]; locale: string }> }): Promise<Metadata> {
-  const { slug, locale } = await params;
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const slug = ['portfolio'];
   const page = await pageService.getPageBySlug(slug, locale);
 
   if (!page) {
@@ -43,10 +43,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function Page({ params }: { params: Promise<{ slug: string[]; locale: string }> }) {
+export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
   const currentUrl = await getCurrentUrl();
   console.log({ params: await params, currentUrl });
-  const { slug = ['portfolio'], locale } = await params;
+  const slug = ['portfolio'];
+  const { locale } = await params;
   const dict = await getDictionary(locale);
   const page = await pageService.getPageBySlug(slug, locale);
 

@@ -1,5 +1,5 @@
 import { JSX, type ReactNode } from 'react';
-import styles from './PageMarkup.module.scss';
+import styles from './page-markup.module.scss';
 
 export function PageMarkup({ children, sideEl }: { children: ReactNode, sideEl?: JSX.Element }): JSX.Element {
   return <div className={styles.layoutWrapper}>

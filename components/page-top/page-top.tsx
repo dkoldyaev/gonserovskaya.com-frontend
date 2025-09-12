@@ -1,5 +1,5 @@
 import { LangSwitcher } from '../lang-switcher/lang-switcher';
-import { PageMarkup } from '../PageMarkup';
+import { PageMarkup } from '../page-markup';
 import styles from './page-top.module.scss';
 import { Menu } from '../menu/menu';
 

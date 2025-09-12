@@ -1,4 +1,4 @@
-import { TPage } from "./page"
+import { TPage } from "../../types/page"
 
 export type TPagesListBlock = {
   __component: "blocks.pages-list",

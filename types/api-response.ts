@@ -1,19 +1,20 @@
 import { TDocumentMeta } from "./_document-meta";
 import { TImage } from "./image";
-import { TBlock } from "./block";
+import { TBlock } from "../modules/blocks/block";
 
 export type TSeo = {
   id: number;
-  metaTitle: string;
-  metaDescription: string;
+  title: string;
+  description: string;
   keywords: string;
-  metaRobots: string;
-  structuredData: any;
-  metaViewport: string;
-  canonicalURL: string;
-  og_image: TImage;
-  twitter_card: TImage;
-  twitter_image: TImage;
+  og_title: string;
+  og_description: string;
+  og_type: string;
+  twitter_title: string | null;
+  twitter_description: string | null;
+  twitter_image: TImage | null;
+  twitter_card: TImage | null;
+  og_image: TImage | null;
 };
 
 export type TFile = {
@@ -51,19 +52,15 @@ export type TContentPage = {
 
 export type TContentBlock = TBlock;
 
-export type TPageAttributes = TDocumentMeta & {
+export type TPageData = TDocumentMeta & {
+  id: number;
+  documentId: string;
   title: string;
-  description: string;
   locale: string;
   url: string;
-  cover: TImage;
-  seo: TSeo;
+  cover: TImage | null;
+  seo: TSeo | null;
   content: TContentBlock[];
-};
-
-export type TPageData = {
-  id: number;
-  attributes: TPageAttributes;
 };
 
 export type TPageApiResponse = {

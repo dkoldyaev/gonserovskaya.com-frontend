@@ -1,4 +1,4 @@
-import { TImage } from "../image";
+import { TImage } from "@/types/image";
 
 export type TImageBlock = {
   __component: "blocks.image";

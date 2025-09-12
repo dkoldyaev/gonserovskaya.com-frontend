@@ -1,4 +1,4 @@
-import { TFile } from "../api-response";
+import { TFile } from "@/types/api-response";
 
 export type TFileBlock = {
   __component: "blocks.file";
