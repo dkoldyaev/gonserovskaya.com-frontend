@@ -27,7 +27,7 @@ export type TImage = TImageFile & TDocumentMeta & {
   alternativeText: string,
   caption: string,
 
-  previewUrl: null,
+  previewUrl: string | null,
   provider: "aws-s3",
   provider_metadata: null,
 

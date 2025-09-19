@@ -1,4 +1,4 @@
-import { TImage } from "../../types/image"
+import { TImage } from "../../../types/image"
 
 export type TGalleryImage = {
   id: number,
@@ -11,6 +11,6 @@ export type TGalleryBlock = {
   __component: "blocks.gallery",
   id: number,
   title: string,
-  type: string,
+  type: 'slider' | 'grid',
   images: TGalleryImage[]
 };

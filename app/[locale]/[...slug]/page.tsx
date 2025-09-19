@@ -1,16 +1,18 @@
 import 'server-only';
 import { Metadata } from 'next';
 import { getDictionary } from '@/i18n/get-dictionary';
-import { LangSwitcher } from '@/components/lang-switcher/lang-switcher';
-import { getCurrentLocale, getCurrentUrl } from '@/lib/headers';
+import { getCurrentUrl } from '@/lib/headers';
 import { PageMarkup } from '@/components/page-markup';
 import { PageTop } from '@/components/page-top';
 import { pageService } from '@/services';
 import { metadataGenerator } from '@/modules/seo';
 import styles from './page.module.scss';
+import { Block } from '@/modules/blocks/block';
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string[]; locale: string }> }): Promise<Metadata> {
-  const { slug, locale } = await params;
+const PORTFOLIO_DEFAULT_SLUG: string[] = [];
+
+export async function generateMetadata({ params }: { params: Promise<{ slug?: string[]; locale: string }> }): Promise<Metadata> {
+  const { slug = PORTFOLIO_DEFAULT_SLUG, locale } = await params;
   const page = await pageService.getPageBySlug(slug, locale);
 
   if (!page) {
@@ -43,10 +45,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function Page({ params }: { params: Promise<{ slug: string[]; locale: string }> }) {
+export default async function Page({ params }: { params: Promise<{ slug?: string[]; locale: string }> }) {
   const currentUrl = await getCurrentUrl();
   console.log({ params: await params, currentUrl });
-  const { slug = ['portfolio'], locale } = await params;
+  const { slug = PORTFOLIO_DEFAULT_SLUG, locale } = await params;
   const dict = await getDictionary(locale);
   const page = await pageService.getPageBySlug(slug, locale);
 
@@ -56,8 +58,9 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
       <div className={styles.mainSection}>
         <PageMarkup>
           <main>
-            <pre>{JSON.stringify(slug, null, 2)}</pre>
-            <pre>{JSON.stringify(page, null, 2)}</pre>
+            {page?.content.map(block => (
+              <Block key={block.id} {...block} />
+            ))}
           </main>
         </PageMarkup>
       </div>
