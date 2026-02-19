@@ -1,6 +1,5 @@
 import 'server-only';
 import type { PropsWithChildren } from 'react';
-import { getI18n } from '@/i18n/remote';
 import styles from './layout.module.scss';
 import classNames from 'classnames';
 

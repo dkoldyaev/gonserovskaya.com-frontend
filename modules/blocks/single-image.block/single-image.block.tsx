@@ -30,8 +30,8 @@ export function SingleImageBlock({
     className={styles.singleImage}
     alt={alt || title || ''}
     src={url}
-    width={width || 1044}
-    height={height || 912}
+    width={width}
+    height={height}
     placeholder="blur"
     blurDataURL={thumbnailUrl || undefined}
   />;

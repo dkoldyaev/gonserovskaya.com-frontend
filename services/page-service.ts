@@ -34,7 +34,8 @@ export class PageService {
         'content.images',
         'content.images.image',
         'content.pages',
-        'content.pages.cover'
+        'content.pages.cover',
+        'content.pages.cover_background',
       ]
     };
 

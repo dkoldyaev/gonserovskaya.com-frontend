@@ -16,7 +16,8 @@
     "react": "latest",
     "react-dom": "latest",
     "sass": "^1.91.0",
-    "server-only": "latest"
+    "server-only": "latest",
+    "yet-another-react-lightbox": "^3.25.0"
   },
   "devDependencies": {
     "@types/node": "latest",

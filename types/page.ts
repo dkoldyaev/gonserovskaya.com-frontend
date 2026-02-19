@@ -5,6 +5,7 @@ import { TPageData, TPageApiResponse } from "./api-response";
 
 export type TPagePopulatedFields = {
   cover: TImage;
+  cover_background: string;
   content: TBlock[];
   url: string;
   seo: {

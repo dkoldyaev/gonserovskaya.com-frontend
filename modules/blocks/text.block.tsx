@@ -81,8 +81,8 @@ export function TextPartList({ format, children }: TTextPartList) {
 export function TextPartH({ children, level }: TTextPartH<1 | 2 | 3>) {
   const Component = `h${level}`;
 
-  return createElement(Component, {}, children.map(child => (
-    child.type === 'link' ? <TextPartLink {...child} /> : <TextPartSpan {...child} />
+  return createElement(Component, {}, children.map((child, index) => (
+    child.type === 'link' ? <TextPartLink key={index} {...child} /> : <TextPartSpan key={index} {...child} />
   )));
 }
 

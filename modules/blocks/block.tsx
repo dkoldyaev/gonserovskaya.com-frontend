@@ -1,8 +1,9 @@
-import { TGalleryBlock, TPagesListBlock, TTextBlock } from ".";
 import { TEmbeddedBlock, TextBlockEmbedded } from "./embedded.block";
-import { TFileBlock } from "./file.block";
+import { BlockFile, TFileBlock } from "./file/file.block";
+import { GalleryBlock, TGalleryBlock } from "./gallery/galery.block";
+import { PagesListBlock, TPagesListBlock } from "./pages-list/pages-list.block";
 import { SingleImageBlock, TSingleImageBlock } from "./single-image.block/single-image.block";
-import { BlockText } from "./text.block";
+import { BlockText, TTextBlock } from "./text.block";
 
 export type TBlock =
   | TFileBlock
@@ -20,6 +21,12 @@ export function Block(blockData: TBlock) {
       return <SingleImageBlock {...blockData} />
     case 'blocks.embedded':
       return <TextBlockEmbedded {...blockData} />
+    case 'blocks.gallery':
+      return <GalleryBlock {...blockData} />
+    case 'blocks.pages-list':
+      return <PagesListBlock {...blockData} />
+    case 'blocks.file':
+      return <BlockFile {...blockData} />
     default:
       return <pre>{JSON.stringify(blockData, null, 2)}</pre>
   }

@@ -1,7 +1,5 @@
 import 'server-only';
 import { Metadata } from 'next';
-import { getDictionary } from '@/i18n/get-dictionary';
-import { getCurrentUrl } from '@/lib/headers';
 import { PageMarkup } from '@/components/page-markup';
 import { PageTop } from '@/components/page-top';
 import { pageService } from '@/services';
@@ -46,11 +44,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug?: st
 }
 
 export default async function Page({ params }: { params: Promise<{ slug?: string[]; locale: string }> }) {
-  const currentUrl = await getCurrentUrl();
-  console.log({ params: await params, currentUrl });
+  if (!params) {
+    return <div>Loading...</div>;
+  }
   const { slug = PORTFOLIO_DEFAULT_SLUG, locale } = await params;
-  const dict = await getDictionary(locale);
   const page = await pageService.getPageBySlug(slug, locale);
+  console.log('PAGE', { page, slug, locale }); // --- IGNORE ---
 
   return (
     <>

@@ -1,4 +1,3 @@
-import { JSX } from 'react';
 import styles from './lang-switcher.module.scss';
 import Link from 'next/link';
 import classNames from 'classnames';
