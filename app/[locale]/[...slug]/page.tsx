@@ -49,7 +49,6 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
   }
   const { slug = PORTFOLIO_DEFAULT_SLUG, locale } = await params;
   const page = await pageService.getPageBySlug(slug, locale);
-  console.log('PAGE', { page, slug, locale }); // --- IGNORE ---
 
   return (
     <>

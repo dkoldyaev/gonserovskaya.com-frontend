@@ -24,7 +24,7 @@ export function GalleryGridBlock({
             onClick={() => setCurrentIndex(index)}
             key={image.id}
             alt={image.alternativeText || image.caption || ''}
-            src={image.formats.small.url || image.url}
+            src={image.formats.small?.url || image.url}
             className={styles['imageGalleryGrid-image']}
             width={240}
             height={200}

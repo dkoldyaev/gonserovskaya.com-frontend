@@ -2,6 +2,7 @@ import { TPage } from "@/types/page";
 import styles from './pages-list.module.scss';
 import Link from "next/link";
 import Image from 'next/image';
+import { getCurrentLocale } from '@/lib/headers';
 
 export type TPagesListBlock = {
   __component: "blocks.pages-list",
@@ -19,9 +20,16 @@ function hexToRgb(hex: string) {
   ];
 }
 
-export function PagesListBlock({ pages }: TPagesListBlock) {
+function getLocalizedUrl(url: string, locale: string): string {
+  return url.startsWith('/') ? `/${locale}${url}` : `/${locale}/${url}`;
+}
+
+export async function PagesListBlock({ pages }: TPagesListBlock) {
+  const currentLocale = await getCurrentLocale();
+
   return <div className={styles.portfolioList}>
     {pages.map((item, index) => {
+      const localizedUrl = getLocalizedUrl(item.url, currentLocale);
       const backgroundColor = item.cover_background || '#363636';
       const backgroundColorSet = hexToRgb(backgroundColor);
       const style = {
@@ -31,12 +39,13 @@ export function PagesListBlock({ pages }: TPagesListBlock) {
         <h2 className={styles['portfolioListItem-title']}>
           <Link className={styles['portfolioListItem-title-link']}
             style={style}
-            href={item.url}>
+            href={localizedUrl}
+            locale={currentLocale}>
             {item.title}
             {item.cover_background}
           </Link>
         </h2>
-        <Link href={item.url}>
+        <Link href={localizedUrl} locale={currentLocale}>
           <Image
             className={styles['portfolioListItem-image']}
             src={item.cover.formats.small.url}
