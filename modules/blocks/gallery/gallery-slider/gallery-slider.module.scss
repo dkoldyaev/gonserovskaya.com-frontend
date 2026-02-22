@@ -1,13 +1,17 @@
 .gallerySlider {
   width: 100%;
-  margin: 2rem 0;
+
+  :global(.yarl__slide_image) {
+    object-fit: contain;
+  }
+
+  :global(.yarl__container) {
+    background: transparent;
+  }
 }
 
 .title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  text-align: center;
+  display: none;
 }
 
 .sliderContainer {

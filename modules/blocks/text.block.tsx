@@ -1,4 +1,5 @@
 import React, { createElement, CSSProperties, useMemo } from "react";
+import styles from './text.block.module.scss';
 
 export type TTextPartSpan = {
   type: "text",
@@ -50,7 +51,7 @@ export type TTextBlock = {
 }
 
 export function BlockText({ text }: TTextBlock) {
-  return <>
+  return <div className={styles.text}>
     {text.map((textPart, index) => {
       if (textPart.type === 'heading') {
         return <TextPartH key={index} {...textPart} />
@@ -62,7 +63,7 @@ export function BlockText({ text }: TTextBlock) {
         return <TextPartList key={index} {...textPart} />
       }
     })}
-  </>
+  </div>
 }
 
 export function TextPartListItem({ children }: TTextPartListItem) {

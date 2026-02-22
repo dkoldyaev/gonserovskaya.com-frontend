@@ -42,7 +42,6 @@ export async function PagesListBlock({ pages }: TPagesListBlock) {
             href={localizedUrl}
             locale={currentLocale}>
             {item.title}
-            {item.cover_background}
           </Link>
         </h2>
         <Link href={localizedUrl} locale={currentLocale}>

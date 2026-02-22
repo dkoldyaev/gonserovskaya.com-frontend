@@ -6,6 +6,10 @@
   align-items: flex-end;
   column-gap: 95px;
 
+  li {
+    list-style: none;
+  }
+
   @media all and (max-width: 1300px) {
     column-gap: 30px;
   }

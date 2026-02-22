@@ -50,15 +50,22 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
   const { slug = PORTFOLIO_DEFAULT_SLUG, locale } = await params;
   const page = await pageService.getPageBySlug(slug, locale);
 
+  const isListingPage = page?.content.some(block => block.__component === 'blocks.pages-list');
+
   return (
     <>
       <PageTop />
       <div className={styles.mainSection}>
         <PageMarkup>
-          <main>
-            {page?.content.map(block => (
-              <Block key={block.id} {...block} />
-            ))}
+          <main className={styles.pageContent}>
+            {!isListingPage && page?.title && (
+              <h1 className={styles.pageTitle}>{page.title}</h1>
+            )}
+            <div className={styles.pageBlocks}>
+              {page?.content.map(block => (
+                <Block key={block.id} {...block} />
+              ))}
+            </div>
           </main>
         </PageMarkup>
       </div>

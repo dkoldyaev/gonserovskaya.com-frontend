@@ -1,5 +1,17 @@
 .socialLinks {
   display: flex;
-  gap: 16px;
-  align-items: center;
+  flex-direction: row;
+  column-gap: 30px;
+  margin-bottom: 3px;
+}
+
+.socialLink {
+  display: block;
+  overflow: hidden;
+}
+
+.socialLinkImg {
+  display: block;
+  height: 16px;
+  width: auto;
 }

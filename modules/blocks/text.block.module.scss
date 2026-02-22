@@ -1,0 +1,31 @@
+.text {
+  white-space: pre-line;
+  display: block;
+  font-family: Montserrat, 'Roboto Mono', serif;
+
+  p + p {
+    margin-top: 1em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    margin-top: 1em;
+    margin-bottom: 0.25em;
+  }
+
+  strong {
+    font-weight: bold;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  del {
+    text-decoration: overline;
+  }
+
+  a {
+    color: inherit;
+  }
+}
