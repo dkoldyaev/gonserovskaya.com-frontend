@@ -48,7 +48,7 @@ async function getMenuData(): Promise<TMenuItem[]> {
   });
 
   const data: MenuResponse = await res.json();
-  return data.data.item;
+  return data.data?.item;
 }
 
 export async function Menu(): Promise<JSX.Element> {
@@ -56,7 +56,7 @@ export async function Menu(): Promise<JSX.Element> {
 
   return (
     <ul className={styles.menu}>
-      {menuItems.map(menuItem => (
+      {(menuItems || []).map(menuItem => (
         <MenuItem
           key={menuItem.id}
           {...menuItem}
