@@ -11,10 +11,11 @@
   },
   "dependencies": {
     "classnames": "^2.5.1",
-    "next": "latest",
+    "keen-slider": "^6.8.6",
+    "next": "16.1.6",
     "qs": "^6.14.0",
-    "react": "latest",
-    "react-dom": "latest",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "sass": "^1.91.0",
     "server-only": "latest",
     "yet-another-react-lightbox": "^3.25.0"
@@ -22,10 +23,14 @@
   "devDependencies": {
     "@types/node": "latest",
     "@types/qs": "^6.14.0",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
     "eslint": "latest",
-    "eslint-config-next": "latest",
+    "eslint-config-next": "16.1.6",
     "typescript": "latest"
+  },
+  "overrides": {
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3"
   }
 }

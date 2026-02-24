@@ -23,7 +23,7 @@ const resolvePreferredLocale = (req: NextRequest, locales: readonly string[], de
   return found ?? defaultLocale;
 };
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const { locales, defaultLocale } = await getI18n();
   const { pathname } = req.nextUrl;
 
