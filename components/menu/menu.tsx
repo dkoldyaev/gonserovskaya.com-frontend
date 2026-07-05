@@ -62,7 +62,9 @@ export async function Menu(): Promise<JSX.Element> {
           ? `/${currentLocale}${menuItem.page.url}`
           : `/${currentLocale}/${menuItem.page.url}`;
         const isExactMatch = currentUrl === localizedUrl || (menuItem.page.url === '/' && currentUrl === `/${currentLocale}`);
-        const isSubPage = menuItem.page.url === '/' && currentUrl.startsWith(`/${currentLocale}/`) && !menuItems.some(other => other.page.url !== '/' && currentUrl.startsWith(`/${currentLocale}${other.page.url}`));
+        const isSubPage = menuItem.page.url === '/'
+          ? currentUrl.startsWith(`/${currentLocale}/`) && !menuItems.some(other => other.page.url !== '/' && currentUrl.startsWith(other.page.url.startsWith('/') ? `/${currentLocale}${other.page.url}` : `/${currentLocale}/${other.page.url}`))
+          : currentUrl.startsWith(`${localizedUrl}/`);
         const isCurrent = isExactMatch || isSubPage;
         return (
           <MenuItem
