@@ -3,6 +3,11 @@ import type { PropsWithChildren } from 'react';
 import styles from './layout.module.scss';
 import classNames from 'classnames';
 import './globals.css';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://gonserovskaya.com'),
+};
 
 export const revalidate = 31536000; // 1 year
 export const dynamic = 'force-static';
