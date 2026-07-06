@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    console.log('[Revalidation Webhook] Received payload:', JSON.stringify(body, null, 2));
+    console.log('[Revalidation Webhook] Received payload:', {event: body.event, model: body.model, entry: { url: body.entry.url, locale: body.entry.locale, title: body.entry.title }});
 
     let revalidatedPaths: string[] = [];
 
