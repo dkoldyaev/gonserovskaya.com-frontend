@@ -9,6 +9,32 @@ import { Block } from '@/modules/blocks/block';
 
 const PORTFOLIO_DEFAULT_SLUG: string[] = [];
 
+import { getI18n } from '@/i18n/remote';
+
+export async function generateStaticParams() {
+  const { locales } = await getI18n();
+  // Fetch default locale pages. We assume slugs are identical across locales.
+  const pagesData = await pageService.getAllPages();
+  const pages = pagesData?.data || [];
+  
+  const params: { locale: string; slug: string[] }[] = [];
+  
+  for (const page of pages) {
+    if (!page.url || page.url === '/') continue;
+    
+    const slug = page.url.split('/').filter(Boolean);
+    
+    for (const localeObj of locales) {
+      params.push({
+        locale: localeObj.code,
+        slug,
+      });
+    }
+  }
+  
+  return params;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug?: string[]; locale: string }> }): Promise<Metadata> {
   const { slug = PORTFOLIO_DEFAULT_SLUG, locale } = await params;
   const page = await pageService.getPageBySlug(slug, locale);
@@ -51,10 +77,11 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
   const page = await pageService.getPageBySlug(slug, locale);
 
   const isListingPage = page?.content.some(block => block.__component === 'blocks.pages-list');
+  const currentUrl = slug.length > 0 ? `/${locale}/${slug.join('/')}` : `/${locale}`;
 
   return (
     <>
-      <PageTop />
+      <PageTop locale={locale} currentUrl={currentUrl} />
       <div className={styles.mainSection}>
         <PageMarkup>
           <main className={styles.pageContent}>
@@ -63,7 +90,7 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
             )}
             <div className={styles.pageBlocks}>
               {page?.content.map(block => (
-                <Block key={block.id} {...block} />
+                <Block key={block.id} blockData={block} locale={locale} />
               ))}
             </div>
           </main>

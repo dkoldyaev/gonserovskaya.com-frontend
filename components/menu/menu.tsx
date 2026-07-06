@@ -2,7 +2,6 @@ import { JSX } from 'react';
 import Link from 'next/link';
 import styles from './menu.module.scss';
 import classNames from 'classnames';
-import { getCurrentLocale, getCurrentUrl } from '@/lib/headers';
 
 export type TMenuItem = {
   id: number;
@@ -18,15 +17,14 @@ type MenuResponse = {
   data: { item: TMenuItem[] }
 };
 
-export async function MenuItem({ text, target, page, isCurrent }: TMenuItem & { isCurrent?: boolean }) {
+export async function MenuItem({ text, target, page, isCurrent, locale }: TMenuItem & { isCurrent?: boolean, locale: string }) {
   const className = classNames(
     styles.menuLink,
     { [styles['menuLink-active']]: isCurrent }
   );
-  const currentLocale = await getCurrentLocale();
   const localizedUrl = page.url.startsWith('/')
-    ? `/${currentLocale}${page.url}`      // /about → /en/about
-    : `/${currentLocale}/${page.url}`;
+    ? `/${locale}${page.url}`      // /about → /en/about
+    : `/${locale}/${page.url}`;
 
   return (
     <li>
@@ -43,27 +41,24 @@ async function getMenuData(locale: string): Promise<TMenuItem[]> {
     return [];
   }
 
-  const res = await fetch(`${host}/api/menu?populate[]=item&populate[]=item.page&locale=${locale}`, {
-    cache: 'no-store'
-  });
+  const res = await fetch(`${host}/api/menu?populate[]=item&populate[]=item.page&locale=${locale}`);
 
   const data: MenuResponse = await res.json();
   return data.data?.item ?? [];
 }
 
-export async function Menu(): Promise<JSX.Element> {
-  const currentLocale = await getCurrentLocale();
-  const [menuItems, currentUrl] = await Promise.all([getMenuData(currentLocale), getCurrentUrl()]);
+export async function Menu({ locale, currentUrl }: { locale: string; currentUrl: string }): Promise<JSX.Element> {
+  const menuItems = await getMenuData(locale);
 
   return (
     <ul className={styles.menu}>
       {(menuItems || []).map(menuItem => {
         const localizedUrl = menuItem.page.url.startsWith('/')
-          ? `/${currentLocale}${menuItem.page.url}`
-          : `/${currentLocale}/${menuItem.page.url}`;
-        const isExactMatch = currentUrl === localizedUrl || (menuItem.page.url === '/' && currentUrl === `/${currentLocale}`);
+          ? `/${locale}${menuItem.page.url}`
+          : `/${locale}/${menuItem.page.url}`;
+        const isExactMatch = currentUrl === localizedUrl || (menuItem.page.url === '/' && currentUrl === `/${locale}`);
         const isSubPage = menuItem.page.url === '/'
-          ? currentUrl.startsWith(`/${currentLocale}/`) && !menuItems.some(other => other.page.url !== '/' && currentUrl.startsWith(other.page.url.startsWith('/') ? `/${currentLocale}${other.page.url}` : `/${currentLocale}/${other.page.url}`))
+          ? currentUrl.startsWith(`/${locale}/`) && !menuItems.some(other => other.page.url !== '/' && currentUrl.startsWith(other.page.url.startsWith('/') ? `/${locale}${other.page.url}` : `/${locale}/${other.page.url}`))
           : currentUrl.startsWith(`${localizedUrl}/`);
         const isCurrent = isExactMatch || isSubPage;
         return (
@@ -71,6 +66,7 @@ export async function Menu(): Promise<JSX.Element> {
             key={menuItem.id}
             {...menuItem}
             isCurrent={isCurrent}
+            locale={locale}
           />
         );
       })}

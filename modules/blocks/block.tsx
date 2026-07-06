@@ -13,7 +13,7 @@ export type TBlock =
   | TPagesListBlock
   | TTextBlock;
 
-export function Block(blockData: TBlock) {
+export function Block({ blockData, locale }: { blockData: TBlock; locale: string }) {
   switch (blockData.__component) {
     case 'blocks.text':
       return <BlockText {...blockData} />
@@ -24,7 +24,7 @@ export function Block(blockData: TBlock) {
     case 'blocks.gallery':
       return <GalleryBlock {...blockData} />
     case 'blocks.pages-list':
-      return <PagesListBlock {...blockData} />
+      return <PagesListBlock {...blockData} locale={locale} />
     case 'blocks.file':
       return <BlockFile {...blockData} />
     default:

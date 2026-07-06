@@ -1,4 +1,3 @@
-import { getCurrentLocale } from '@/lib/headers';
 import styles from './social-links.module.scss';
 
 type SocialLinksResponse = {
@@ -21,17 +20,14 @@ async function getMenuData(locale: string): Promise<SocialLinksResponse['data'] 
     return null;
   }
 
-  const res = await fetch(`${host}/api/menu?populate[social_links][populate][]=icon&locale=${locale}`, {
-    cache: 'no-store'
-  });
+  const res = await fetch(`${host}/api/menu?populate[social_links][populate][]=icon&locale=${locale}`);
 
   const data = await res.json();
   return data.data ?? null;
 }
 
-export async function SocialLinks() {
-  const currentLocale = await getCurrentLocale();
-  const menuData = await getMenuData(currentLocale);
+export async function SocialLinks({ locale }: { locale: string }) {
+  const menuData = await getMenuData(locale);
   
   if (!menuData) return null;
 

@@ -33,7 +33,11 @@ export async function proxy(req: NextRequest) {
   if (hasLocalePrefix) {
     const locale = pathname.split('/')[1] || defaultLocale;
     const res = NextResponse.next();
-    res.cookies.set(LOCALE_COOKIE, locale, { path: '/', maxAge: 60 * 60 * 24 * 365 });
+    
+    const cookieLocale = req.cookies.get(LOCALE_COOKIE)?.value;
+    if (cookieLocale !== locale) {
+      res.cookies.set(LOCALE_COOKIE, locale, { path: '/', maxAge: 60 * 60 * 24 * 365 });
+    }
 
     // Add headers for server components
     res.headers.set('x-current-locale', locale);
@@ -48,7 +52,11 @@ export async function proxy(req: NextRequest) {
     const url = req.nextUrl.clone();
     url.pathname = `/${locale}`;
     const res = NextResponse.redirect(url);
-    res.cookies.set(LOCALE_COOKIE, locale, { path: '/', maxAge: 60 * 60 * 24 * 365 });
+    
+    const cookieLocale = req.cookies.get(LOCALE_COOKIE)?.value;
+    if (cookieLocale !== locale) {
+      res.cookies.set(LOCALE_COOKIE, locale, { path: '/', maxAge: 60 * 60 * 24 * 365 });
+    }
 
     // Add headers for server components
     res.headers.set('x-current-locale', locale);

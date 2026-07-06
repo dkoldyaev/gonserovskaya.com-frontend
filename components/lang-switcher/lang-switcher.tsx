@@ -2,19 +2,15 @@ import styles from './lang-switcher.module.scss';
 import Link from 'next/link';
 import classNames from 'classnames';
 import { getI18n, Locale } from '@/i18n/remote';
-import { getCurrentLocale, getCurrentUrl } from '@/lib/headers';
 
-export async function LangSwitcherItem({ lang, isCurrent }: { lang: Locale; isCurrent: boolean }) {
+export async function LangSwitcherItem({ lang, isCurrent, currentLocale, currentUrl }: { lang: Locale; isCurrent: boolean, currentLocale: string, currentUrl: string }) {
   const className = classNames(styles['lang-item'], { [styles['lang-item--active']]: isCurrent });
-  const currentPath = await getCurrentUrl();
-  const currentLocale = await getCurrentLocale();
 
   return (
     <li className={className}>
       <Link
         className={styles['lang-link']}
-        locale={lang.code}
-        href={currentPath.replace(`/${currentLocale}`, `/${lang.code}`)}
+        href={currentUrl.replace(`/${currentLocale}`, `/${lang.code}`)}
       >
         {lang.name}
       </Link>
@@ -22,21 +18,22 @@ export async function LangSwitcherItem({ lang, isCurrent }: { lang: Locale; isCu
   );
 }
 
-export async function LangSwitcher() {
+export async function LangSwitcher({ locale, currentUrl }: { locale: string, currentUrl: string }) {
   const { locales } = await getI18n();
-  const currentLocale = await getCurrentLocale();
-  const currentLang = locales.find(({ code }) => code === currentLocale);
+  const currentLang = locales.find(({ code }) => code === locale);
 
   return (
     <div className={styles.langSwitcher}>
       <label htmlFor="lang-switcher" className={styles.currentLang}>{(currentLang || locales[0])?.name}</label>
       <input type="checkbox" id="lang-switcher" className={styles.checkboxHandler} />
       <ul className={styles.languagesList}>
-        {locales.map(locale => (
+        {locales.map(l => (
           <LangSwitcherItem
-            key={locale.code}
-            lang={locale}
-            isCurrent={locale.code === currentLocale}
+            key={l.code}
+            lang={l}
+            isCurrent={l.code === locale}
+            currentLocale={locale}
+            currentUrl={currentUrl}
           />
         ))}
       </ul>
