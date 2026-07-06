@@ -37,10 +37,10 @@ export function GalleryBlock(galleryBlock: TGalleryBlock) {
   }
 
   if (galleryBlock.type === 'grid') {
-    return <GalleryGridBlock {...galleryBlock} slides={slides} />;
+    return <GalleryGridBlock key={`gallery_grid_${galleryBlock.id}`} {...galleryBlock} slides={slides} />;
   }
 
   if (galleryBlock.type === 'slider') {
-    return <GallerySliderBlock {...galleryBlock} slides={slides} />;
+    return <GallerySliderBlock key={`gallery_slider_${galleryBlock.id}`} {...galleryBlock} slides={slides} />;
   }
 }

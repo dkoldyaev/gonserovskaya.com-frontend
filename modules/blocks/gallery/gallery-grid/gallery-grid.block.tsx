@@ -22,7 +22,7 @@ export function GalleryGridBlock({
         {images.map(({ image }, index) => (
           <Image
             onClick={() => setCurrentIndex(index)}
-            key={image.id}
+            key={`${image.id}_${index}`}
             alt={image.alternativeText || image.caption || ''}
             src={image.formats.small?.url || image.url}
             className={styles['imageGalleryGrid-image']}

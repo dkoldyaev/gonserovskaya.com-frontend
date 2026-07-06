@@ -2,11 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 
 // GET handler for easy manual testing / manual integration:
-// GET /api/revalidate?secret=YOUR_TOKEN&path=/en/projects
+// GET /api/revalidate?path=/en/projects
+// Requires header: Authorization: Bearer YOUR_TOKEN
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const secret = searchParams.get('secret');
   const path = searchParams.get('path');
+  
+  const authHeader = request.headers.get('authorization');
+  const secret = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;
 
   const token = process.env.REVALIDATION_TOKEN;
 
@@ -49,9 +52,10 @@ export async function GET(request: NextRequest) {
 }
 
 // POST handler for webhooks (e.g. Strapi or general automated triggers)
+// Requires header: Authorization: Bearer YOUR_TOKEN
 export async function POST(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const secret = searchParams.get('secret') || request.headers.get('x-revalidate-token');
+  const authHeader = request.headers.get('authorization');
+  const secret = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;
   const token = process.env.REVALIDATION_TOKEN;
 
   if (!token) {
@@ -74,29 +78,38 @@ export async function POST(request: NextRequest) {
 
     let revalidatedPaths: string[] = [];
 
-    // Support Strapi Webhooks
-    // Strapi payload usually has:
-    // event: "entry.update" | "entry.publish" | "entry.unpublish" | etc.
-    // model: "page"
-    // entry: { url: "/about", locale: "en", ... }
     if (body.model && body.entry) {
       const { model, entry, event } = body;
       const locale = entry.locale || 'en'; // default fallback
-      const url = entry.url; // e.g. "/projects" or "/"
       
       console.log(`[Revalidation Webhook] Processing Strapi event "${event}" for model "${model}"`);
 
-      if (url) {
-        // Construct standard localized paths
-        // e.g. url = "/" -> "/en"
-        // e.g. url = "/projects" -> "/en/projects"
-        const targetPath = url === '/' ? `/${locale}` : `/${locale}${url}`;
-        revalidatePath(targetPath);
-        revalidatedPaths.push(targetPath);
-        
-        // Also revalidate the main layout to clear navigation/header caches if applicable
-        revalidatePath('/[locale]/[...slug]', 'layout');
-        revalidatedPaths.push('/[locale]/[...slug] (layout)');
+      if (model === 'page') {
+        const url = entry.url; // e.g. "/projects" or "/"
+        if (url) {
+          const targetPath = url === '/' ? `/${locale}` : `/${locale}${url}`;
+          revalidatePath(targetPath);
+          revalidatedPaths.push(targetPath);
+
+          // Additional logic for parent pages
+          if (url.startsWith('/projects/') || url.startsWith('/portfolio/')) {
+            const homePath = `/${locale}`;
+            revalidatePath(homePath);
+            revalidatedPaths.push(`${homePath} (projects parent)`);
+          } else if (url.startsWith('/drawings/')) {
+            const drawingsPath = `/${locale}/drawings`;
+            revalidatePath(drawingsPath);
+            revalidatedPaths.push(`${drawingsPath} (drawings parent)`);
+          }
+        }
+      } else if (model === 'menu') {
+        // Menu affects all pages in the locale, revalidate layout
+        revalidatePath(`/${locale}`, 'layout');
+        revalidatedPaths.push(`/${locale} (layout)`);
+      } else {
+        // Fallback for other models: revalidate layout
+        revalidatePath(`/${locale}`, 'layout');
+        revalidatedPaths.push(`/${locale} (fallback layout)`);
       }
     } else if (body.path) {
       // General webhook with a simple { "path": "/en/about" } JSON body
@@ -104,8 +117,8 @@ export async function POST(request: NextRequest) {
       revalidatedPaths.push(body.path);
     } else {
       // Fallback: if no specific path was found, revalidate everything (clears all pages)
-      revalidatePath('/[locale]/[...slug]', 'layout');
-      revalidatedPaths.push('/[locale]/[...slug] (fallback layout)');
+      revalidatePath('/', 'layout');
+      revalidatedPaths.push('/ (fallback layout)');
     }
 
     return NextResponse.json({
