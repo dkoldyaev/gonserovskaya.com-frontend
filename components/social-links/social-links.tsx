@@ -43,7 +43,7 @@ export async function SocialLinks() {
       {(social_links || []).map((item) => (
         <a key={item.id} href={item.link} target="_blank" rel="noreferrer" title={item.title} className={styles.socialLink}>
           {item.icon && (
-            <img src={`${host}${item.icon.url}`} alt={item.icon.alternativeText || item.title} className={styles.socialLinkImg} />
+            <img src={item.icon.url.startsWith('http') ? item.icon.url : `${host}${item.icon.url}`} alt={item.title} className={styles.socialLinkImg} />
           )}
         </a>
       ))}
