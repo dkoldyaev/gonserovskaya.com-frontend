@@ -4,6 +4,7 @@ import styles from './layout.module.scss';
 import classNames from 'classnames';
 import './globals.css';
 import { Metadata } from 'next';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://gonserovskaya.com'),
@@ -19,6 +20,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         <div className={appClassName}>
           {children}
         </div>
+        <GoogleAnalytics gaId="G-KK5DVSGYHK" />
       </body>
     </html>
   );
